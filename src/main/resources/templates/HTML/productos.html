@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos - TechCell</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/Styles.css}">
+</head>
+<body>
+<!-- Navbar -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- Incluir Mensajes -->
+<div th:replace="~{fragments/mensajes :: alertas}"></div>
+
+<!-- Productos Section -->
+<div class="container my-5" id="productos">
+    <h2 class="text-center mb-4 fw-bold">Nuestros Productos</h2>
+
+    <!-- Filtro de Categorías
+    <div class="row mb-4">
+        <div class="col-md-12 text-center">
+            <div class="btn-group" role="group">
+                <a th:href="@{/productos}"
+                   th:classappend="${categoriaSeleccionada == 'Todos'} ? 'active' : ''"
+                   class="btn btn-outline-primary btn-lg">
+                    <i class="fas fa-th me-2"></i>Todos
+                </a>
+                <a th:href="@{/productos(categoria='Celular')}"
+                   th:classappend="${categoriaSeleccionada == 'Celular'} ? 'active' : ''"
+                   class="btn btn-outline-primary btn-lg">
+                    <i class="fas fa-mobile-alt me-2"></i>Celulares
+                </a>
+                <a th:href="@{/productos(categoria='Accesorio')}"
+                   th:classappend="${categoriaSeleccionada == 'Accesorio'} ? 'active' : ''"
+                   class="btn btn-outline-primary btn-lg">
+                    <i class="fas fa-headphones me-2"></i>Accesorios
+                </a>
+            </div>
+        </div>
+    </div>-->
+
+    <!-- Lista de Productos -->
+    <div class="row">
+        <div th:if="${productos.isEmpty()}" class="col-12">
+            <div class="alert alert-info text-center">
+                <i class="fas fa-info-circle me-2"></i>
+                No hay productos disponibles en esta categoría.
+            </div>
+        </div>
+
+        <div th:each="producto : ${productos}" class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <img th:src="@{${producto.imagen}}"
+                         th:alt="${producto.nombre}"
+                         class="mb-3"
+                         style="max-width: 200px; max-height: 200px; object-fit: contain;">
+
+                    <h5 class="card-title" th:text="${producto.nombre}">Producto</h5>
+
+                    <h4 class="text-primary mb-3">
+                        Precio: S/ <span th:text="${#numbers.formatDecimal(producto.precio, 1, 2)}">0.00</span>
+                    </h4>
+
+                    <p class="text-muted mb-3">
+                        <i class="fas fa-box me-1"></i>
+                        Stock disponible: <strong th:text="${producto.stock}">0</strong>
+                    </p>
+
+                    <button th:if="${producto.stock > 0}"
+                            class="btn btn-primary agregar-carrito"
+                            th:data-producto-id="${producto.id}"
+                            th:data-producto-nombre="${producto.nombre}"
+                            th:data-producto-precio="${producto.precio}">
+                        <i class="fas fa-cart-plus me-2"></i>Agregar al Carrito
+                    </button>
+
+                    <button th:if="${producto.stock == 0}"
+                            class="btn btn-secondary"
+                            disabled>
+                        <i class="fas fa-times me-2"></i>Sin Stock
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Incluir Footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- Incluir Modales -->
+<div th:replace="~{fragments/modales :: modales}"></div>
+
+<!-- Incluir Modal del Carrito -->
+<div th:replace="~{fragments/modalCarrito :: modalCarrito}"></div>
+
+<!-- Incluir Botón WhatsApp -->
+<div th:replace="~{fragments/botonwsp :: botonWhatsApp}"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/carrito.js}"></script>
+</body>
+</html>
